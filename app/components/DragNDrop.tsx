@@ -20,6 +20,7 @@ export default function DragNDrop() {
     for (let i = 0; i < files.length; i++) {
       if (files[i].type.split("/")[0] !== "image") continue;
       if (!images.some((img) => img.name === files[i].name)) {
+        console.log(files[i]);
         setImages((prev) => [
           ...prev,
           {
@@ -103,7 +104,7 @@ export default function DragNDrop() {
           />
         </div>
         {/* images list */}
-        <div className="w-full grid grid-cols-4 gap-4">
+        <div className="w-full grid grid-cols-4 gap-4 px-6 py-4">
           {images.map((img) => (
             <div
               key={img.name}
@@ -119,6 +120,7 @@ export default function DragNDrop() {
             </div>
           ))}
         </div>
+        {/* Send to imgur to get the real url */}
         <div className="flex flex-col gap-4 mt-6">
           <button
             type="button"
