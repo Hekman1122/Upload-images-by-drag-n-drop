@@ -1,9 +1,9 @@
 "use client";
 type FileType = {
-  name: string;
+  file: File;
   url: string;
 };
-
+import { uploadImages } from "../lib/uploadImages";
 import Image from "next/image";
 import { useState, useRef } from "react";
 export default function DragNDrop() {
@@ -19,12 +19,11 @@ export default function DragNDrop() {
     if (!files) return;
     for (let i = 0; i < files.length; i++) {
       if (files[i].type.split("/")[0] !== "image") continue;
-      if (!images.some((img) => img.name === files[i].name)) {
-        console.log(files[i]);
+      if (!images.some((img) => img.file.name === files[i].name)) {
         setImages((prev) => [
           ...prev,
           {
-            name: files[i].name,
+            file: files[i],
             url: URL.createObjectURL(files[i]),
           },
         ]);
@@ -48,11 +47,11 @@ export default function DragNDrop() {
     const files = e.dataTransfer.files;
     for (let i = 0; i < files.length; i++) {
       if (files[i].type.split("/")[0] !== "image") continue;
-      if (!images.some((img) => img.name === files[i].name)) {
+      if (!images.some((img) => img.file.name === files[i].name)) {
         setImages((prev) => [
           ...prev,
           {
-            name: files[i].name,
+            file: files[i],
             url: URL.createObjectURL(files[i]),
           },
         ]);
@@ -103,11 +102,12 @@ export default function DragNDrop() {
             onChange={onFilesChange}
           />
         </div>
+
         {/* images list */}
         <div className="w-full grid grid-cols-4 gap-4 px-6 py-4">
           {images.map((img) => (
             <div
-              key={img.name}
+              key={img.file.name}
               className="flex flex-col gap-2 justify-center items-center p-1 bg-neutral-100 rounded-lg"
             >
               <Image
@@ -125,6 +125,7 @@ export default function DragNDrop() {
           <button
             type="button"
             className="w-96 px-4 py-2 bg-blue-600 text-white text-sm font-bold rounded-xl opacity-90 duration-200 transition-opacity hover:opacity-100"
+            onClick={() => uploadImages(images[0].file)}
           >
             Upload
           </button>
